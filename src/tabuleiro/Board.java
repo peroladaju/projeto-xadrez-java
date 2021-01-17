@@ -4,6 +4,7 @@ public class Board {
 	private int linhas;
 	private int colunas;
 	private Peca[][] pecas;
+	
 	public Board(int linhas, int colunas) {
 		this.linhas = linhas;
 		this.colunas = colunas;
@@ -22,6 +23,17 @@ public class Board {
 		this.colunas = colunas;
 	}
 	
+	public Peca peca(int linha, int coluna) {
+		return pecas[linha][coluna];
+	}
 	
-
+	public Peca peca(Posicao posicao) {
+		return pecas[posicao.getLinha()][posicao.getColuna()];
+	}
+	
+	public void inserirPeca(Peca peca, Posicao posicao) {
+		
+		pecas[posicao.getLinha()][posicao.getColuna()] = peca;
+		peca.posicao = posicao;
+	}
 }
