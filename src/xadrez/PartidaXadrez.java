@@ -1,7 +1,6 @@
 package xadrez;
 
 import tabuleiro.Board;
-import tabuleiro.Posicao;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
 
@@ -23,11 +22,14 @@ private Board board;
 		}
 		return mat;
 	}
+	private void inserirPrimeiraPeca(char coluna, int linha, XadrezPeca peca) {
+		board.inserirPeca(peca, new PosicaoXadrez(coluna, linha).toPosicao());
+	}
 	
 	private void iniciarPartida() {
-		board.inserirPeca(new Torre(board, Cor.WHITE), new Posicao(2, 1));
-		board.inserirPeca(new Rei(board, Cor.BLACK), new Posicao(0, 4));
-		board.inserirPeca(new Rei(board, Cor.WHITE), new Posicao(7, 4));
+		inserirPrimeiraPeca('b', 6, new Torre(board, Cor.WHITE));
+		inserirPrimeiraPeca('e', 8, new Rei(board, Cor.BLACK));
+		inserirPrimeiraPeca('e', 1, new Rei(board, Cor.WHITE));
 	}
 	
 }
