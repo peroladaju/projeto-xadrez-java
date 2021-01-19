@@ -16,7 +16,7 @@ private Board board;
 	
 	public XadrezPeca[][] getPecas(){
 		XadrezPeca[][] mat = new XadrezPeca[board.getLinhas()][board.getColunas()];
-		for (int i = 0; i<board.getColunas(); i++) {
+		for (int i = 0; i<board.getLinhas(); i++) {
 			for (int j = 0; j < board.getColunas(); j++) {
 				mat[i][j] = (XadrezPeca) board.peca(i, j);
 			}
