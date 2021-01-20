@@ -27,9 +27,20 @@ private Board board;
 	}
 	
 	private void iniciarPartida() {
-		inserirPrimeiraPeca('b', 6, new Torre(board, Cor.WHITE));
-		inserirPrimeiraPeca('e', 8, new Rei(board, Cor.BLACK));
-		inserirPrimeiraPeca('e', 1, new Rei(board, Cor.WHITE));
+		inserirPrimeiraPeca('c', 1, new Torre(board, Cor.WHITE));
+		inserirPrimeiraPeca('c', 2, new Torre(board, Cor.WHITE));
+		inserirPrimeiraPeca('d', 2, new Torre(board, Cor.WHITE));
+		inserirPrimeiraPeca('e', 2, new Torre(board, Cor.WHITE));
+		inserirPrimeiraPeca('e', 1, new Torre(board, Cor.WHITE));
+		inserirPrimeiraPeca('d', 1, new Rei(board, Cor.WHITE));
+		
+		inserirPrimeiraPeca('c', 7, new Torre(board, Cor.BLACK));
+		inserirPrimeiraPeca('c', 8, new Torre(board, Cor.BLACK));
+		inserirPrimeiraPeca('d', 7, new Torre(board, Cor.BLACK));
+		inserirPrimeiraPeca('e', 7, new Torre(board, Cor.BLACK));
+		inserirPrimeiraPeca('e', 8, new Torre(board, Cor.BLACK));
+		inserirPrimeiraPeca('d', 8, new Rei(board, Cor.BLACK));
 	}
+	
 	
 }
