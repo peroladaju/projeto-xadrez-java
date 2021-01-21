@@ -1,8 +1,12 @@
 package xadrez;
 
 import tabuleiro.Board;
+import tabuleiro.Peca;
+import tabuleiro.Posicao;
+import tabuleiro.TabuleiroExcecao;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
+import xadrez.XadrezPeca;
 
 public class PartidaXadrez {
 	
@@ -22,24 +26,44 @@ private Board board;
 		}
 		return mat;
 	}
-	private void inserirPrimeiraPeca(char coluna, int linha, XadrezPeca peca) {
+	public XadrezPeca excutarMovimentoXadrez(PosicaoXadrez origemPosicao, PosicaoXadrez destinoPosicao ) {
+		Posicao origem = origemPosicao.toPosicao();
+		Posicao destino = destinoPosicao.toPosicao();
+		validarOrigemPosicao(origem);
+		Peca capturaPeca = makeMove(origem, destino);
+		return (XadrezPeca)capturaPeca;
+	}
+	
+	private Peca makeMove(Posicao origem, Posicao destino) {
+		Peca p = board.removePeca(origem);
+		Peca capturaPeca = board.removePeca(destino);
+		board.inserirPeca(p, destino);
+		return capturaPeca;
+	}
+	private void validarOrigemPosicao(Posicao posicao) {
+		if (!board.existePeca(posicao)) {
+			throw new ExcecaoXadrez("Não existe peça na posição");
+		}
+	}
+	
+	private void inserirNovaPeca(char coluna, int linha, XadrezPeca peca) {
 		board.inserirPeca(peca, new PosicaoXadrez(coluna, linha).toPosicao());
 	}
 	
 	private void iniciarPartida() {
-		inserirPrimeiraPeca('c', 1, new Torre(board, Cor.WHITE));
-		inserirPrimeiraPeca('c', 2, new Torre(board, Cor.WHITE));
-		inserirPrimeiraPeca('d', 2, new Torre(board, Cor.WHITE));
-		inserirPrimeiraPeca('e', 2, new Torre(board, Cor.WHITE));
-		inserirPrimeiraPeca('e', 1, new Torre(board, Cor.WHITE));
-		inserirPrimeiraPeca('d', 1, new Rei(board, Cor.WHITE));
+		inserirNovaPeca('c', 1, new Torre(board, Cor.WHITE));
+		inserirNovaPeca('c', 2, new Torre(board, Cor.WHITE));
+		inserirNovaPeca('d', 2, new Torre(board, Cor.WHITE));
+		inserirNovaPeca('e', 2, new Torre(board, Cor.WHITE));
+		inserirNovaPeca('e', 1, new Torre(board, Cor.WHITE));
+		inserirNovaPeca('d', 1, new Rei(board, Cor.WHITE));
 		
-		inserirPrimeiraPeca('c', 7, new Torre(board, Cor.BLACK));
-		inserirPrimeiraPeca('c', 8, new Torre(board, Cor.BLACK));
-		inserirPrimeiraPeca('d', 7, new Torre(board, Cor.BLACK));
-		inserirPrimeiraPeca('e', 7, new Torre(board, Cor.BLACK));
-		inserirPrimeiraPeca('e', 8, new Torre(board, Cor.BLACK));
-		inserirPrimeiraPeca('d', 8, new Rei(board, Cor.BLACK));
+		inserirNovaPeca('c', 7, new Torre(board, Cor.BLACK));
+		inserirNovaPeca('c', 8, new Torre(board, Cor.BLACK));
+		inserirNovaPeca('d', 7, new Torre(board, Cor.BLACK));
+		inserirNovaPeca('e', 7, new Torre(board, Cor.BLACK));
+		inserirNovaPeca('e', 8, new Torre(board, Cor.BLACK));
+		inserirNovaPeca('d', 8, new Rei(board, Cor.BLACK));
 	}
 	
 	
