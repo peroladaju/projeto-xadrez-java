@@ -3,10 +3,8 @@ package xadrez;
 import tabuleiro.Board;
 import tabuleiro.Peca;
 import tabuleiro.Posicao;
-import tabuleiro.TabuleiroExcecao;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
-import xadrez.XadrezPeca;
 
 public class PartidaXadrez {
 	
@@ -43,6 +41,9 @@ private Board board;
 	private void validarOrigemPosicao(Posicao posicao) {
 		if (!board.existePeca(posicao)) {
 			throw new ExcecaoXadrez("Não existe peça na posição");
+		}
+		if (!board.peca(posicao).existeUmMovimentoPossivel()) {
+			throw new ExcecaoXadrez("Não existe movimentos possíveis para a peças escolhida");
 		}
 	}
 	
