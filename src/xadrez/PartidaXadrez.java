@@ -3,6 +3,7 @@ package xadrez;
 import tabuleiro.Board;
 import tabuleiro.Peca;
 import tabuleiro.Posicao;
+import tabuleiro.TabuleiroExcecao;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
 
@@ -28,6 +29,7 @@ private Board board;
 		Posicao origem = origemPosicao.toPosicao();
 		Posicao destino = destinoPosicao.toPosicao();
 		validarOrigemPosicao(origem);
+		validarPosicaoDestino(origem.equals(destino));
 		Peca capturaPeca = makeMove(origem, destino);
 		return (XadrezPeca)capturaPeca;
 	}
@@ -44,6 +46,12 @@ private Board board;
 		}
 		if (!board.peca(posicao).existeUmMovimentoPossivel()) {
 			throw new ExcecaoXadrez("Não existe movimentos possíveis para a peças escolhida");
+		}
+	}
+	
+	private void validarPosicaoDestino(Posicao origem, Posicao destino) {
+		if(!board.peca(origem).movimentoPossivel(destino)) {
+			throw new ExcecaoXadrez("A peça escolhida não pode se mover para a posição de destino");
 		}
 	}
 	
