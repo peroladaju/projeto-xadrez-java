@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import xadrez.Cor;
+import xadrez.PartidaXadrez;
 import xadrez.PosicaoXadrez;
 import xadrez.XadrezPeca;
 
@@ -27,6 +28,11 @@ public class UI {
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 	
+	public static void clearScreen() {
+		System.out.println("\033[H\033[2J");
+		System.out.flush();
+	}
+	
 	public static PosicaoXadrez lerPosicaoXadrez(Scanner sc) {
 		try {
 		String s = sc.nextLine();
@@ -38,21 +44,41 @@ public class UI {
 			throw new InputMismatchException("Erro lendo a posição do xadrez: valores válidos são de a1 até h8.");
 		}
 	}
+	public static void printPartida(PartidaXadrez partidaXadrez) {
+		printBoard(partidaXadrez.getPecas());
+		System.out.println();
+		System.out.println("Jogada: " + partidaXadrez.getVirar());
+		System.out.println("Esperando jogador: " + partidaXadrez.getJodadorAtual());
+	}
 	
 	public static void printBoard(XadrezPeca[][] pecas) {
 		for (int i = 0; i < pecas.length; i++) {
 			System.out.print(8 - i + " ");
 			for (int j = 0; j < pecas.length; j++) {
-				printPecas(pecas[i][j]);
+				printPecas(pecas[i][j], false);
+			}
+			System.out.println();
+		}
+		System.out.println("  a b c d e f g h");
+	}
+	
+	public static void printBoard(XadrezPeca[][] pecas, boolean[][] movimentosPossiveis) {
+		for (int i = 0; i < pecas.length; i++) {
+			System.out.print(8 - i + " ");
+			for (int j = 0; j < pecas.length; j++) {
+				printPecas(pecas[i][j], movimentosPossiveis[i][j]);
 			}
 			System.out.println();
 		}
 		System.out.println("  a b c d e f g h");
 	}
 
-	private static void printPecas(XadrezPeca peca) {
+	private static void printPecas(XadrezPeca peca, boolean background) {
+		if(background) {
+			System.out.print(ANSI_GREEN_BACKGROUND);
+		}
 		if (peca == null) {
-			System.out.print("-");
+			System.out.print("-" + ANSI_RESET);
 		}else {
 			if(peca.getCor() == Cor.WHITE) {
 				System.out.print(ANSI_WHITE + peca + ANSI_RESET);
