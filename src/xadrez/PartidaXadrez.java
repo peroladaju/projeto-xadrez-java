@@ -16,6 +16,7 @@ private int virar;
 private Cor jodadorAtual;
 private Board board;
 private boolean check;
+private boolean checkMate;
 
 private List<Peca> pecasDoTabuleiro = new ArrayList<>();
 private List<Peca> pecasCapturadas = new ArrayList<>();	
@@ -40,6 +41,10 @@ public PartidaXadrez() {
 	
 	public boolean getCheck() {
 		return check;
+	}
+	
+	public boolean getCheckMate() {
+		return checkMate;
 	}
 
 	public XadrezPeca[][] getPecas(){
@@ -71,16 +76,26 @@ public PartidaXadrez() {
 		}
 		
 		check = (testeCheck(oponente(jodadorAtual))) ? true : false;
-		proximoJogador();
+		
+		if(testeCheckMate(oponente(jodadorAtual))) {
+			checkMate = true;
+		}else {
+			proximoJogador();
+		
+		}
+		
+		
 		return (XadrezPeca)capturaPeca;
+		
+		
 	}
 	
-	
-
 	private Peca makeMove(Posicao origem, Posicao destino) {
-		Peca p = board.removePeca(origem);
+		XadrezPeca p = (XadrezPeca)board.removePeca(origem);
+		p.incrementaMovimentos();
 		Peca capturaPeca = board.removePeca(destino);
 		board.inserirPeca(p, destino);
+		
 		if (capturaPeca != null) {
 			pecasDoTabuleiro.remove(capturaPeca);
 			pecasCapturadas.add(capturaPeca);
@@ -89,15 +104,14 @@ public PartidaXadrez() {
 	}
 	
 	private void undoMove(Posicao origem, Posicao destino, Peca capturaPeca) {
-		Peca p =board.removePeca(destino);
+		XadrezPeca p = (XadrezPeca)board.removePeca(destino);
+		p.decrementaMovimentos();
 		board.inserirPeca(p, origem);
 		
 		if(capturaPeca != null) {
 			board.inserirPeca(capturaPeca, destino);
 			pecasCapturadas.remove(capturaPeca);
-			pecasDoTabuleiro.add(capturaPeca);
-			
-			
+			pecasDoTabuleiro.add(capturaPeca);	
 		}
 	}
 	
@@ -154,25 +168,51 @@ public PartidaXadrez() {
 		return false;
 	}
 	
+	public boolean testeCheckMate(Cor cor) {
+		if(!testeCheck(cor)) {
+			return false;
+		}
+		List<Peca> list = pecasDoTabuleiro.stream().filter(x -> ((XadrezPeca)x).getCor() == cor).collect(Collectors.toList());
+		for(Peca p : list) {
+			boolean[][] mat = p.movimentoPossivel();
+			for(int linha = 0; linha <board.getLinhas(); linha++) {
+				for(int coluna = 0; coluna <board.getColunas(); coluna++) {
+					if(mat[linha][coluna]) {
+						Posicao origem = ((XadrezPeca)p).getPosicaoXadrez().toPosicao();
+						Posicao destino = new Posicao(linha, coluna);
+						Peca capturaPeca = makeMove(origem, destino);
+						boolean testeCheck = testeCheck(cor);
+						undoMove(origem, destino, capturaPeca);
+						if(!testeCheck) {
+							return false;
+						}
+					}
+				}
+			}
+			
+		}
+		return true;
+	}
+	
 	private void inserirNovaPeca(char coluna, int linha, XadrezPeca peca) {
 		board.inserirPeca(peca, new PosicaoXadrez(coluna, linha).toPosicao());
 		pecasDoTabuleiro.add(peca);
 	}
 	
 	private void iniciarPartida() {
-		inserirNovaPeca('c', 1, new Torre(board, Cor.WHITE));
-		inserirNovaPeca('c', 2, new Torre(board, Cor.WHITE));
-		inserirNovaPeca('d', 2, new Torre(board, Cor.WHITE));
-		inserirNovaPeca('e', 2, new Torre(board, Cor.WHITE));
+		inserirNovaPeca('h', 7, new Torre(board, Cor.WHITE));
+		inserirNovaPeca('d', 1, new Torre(board, Cor.WHITE));
+		inserirNovaPeca('e', 1, new Rei(board, Cor.WHITE));
+		/*inserirNovaPeca('e', 2, new Torre(board, Cor.WHITE));
 		inserirNovaPeca('e', 1, new Torre(board, Cor.WHITE));
-		inserirNovaPeca('d', 1, new Rei(board, Cor.WHITE));
+		inserirNovaPeca('d', 1, new Rei(board, Cor.WHITE));*/
 		
-		inserirNovaPeca('c', 7, new Torre(board, Cor.BLACK));
-		inserirNovaPeca('c', 8, new Torre(board, Cor.BLACK));
-		inserirNovaPeca('d', 7, new Torre(board, Cor.BLACK));
+		inserirNovaPeca('b', 8, new Torre(board, Cor.BLACK));
+		inserirNovaPeca('a', 8, new Rei(board, Cor.BLACK));
+		/*inserirNovaPeca('d', 7, new Torre(board, Cor.BLACK));
 		inserirNovaPeca('e', 7, new Torre(board, Cor.BLACK));
 		inserirNovaPeca('e', 8, new Torre(board, Cor.BLACK));
-		inserirNovaPeca('d', 8, new Rei(board, Cor.BLACK));
+		inserirNovaPeca('d', 8, new Rei(board, Cor.BLACK));*/
 	}
 	
 	
