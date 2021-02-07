@@ -30,31 +30,39 @@ public class UI {
 	public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
-	
+
 	public static void clearScreen() {
 		System.out.println("\033[H\033[2J");
 		System.out.flush();
 	}
-	
+
 	public static PosicaoXadrez lerPosicaoXadrez(Scanner sc) {
 		try {
-		String s = sc.nextLine();
-		char coluna = s.charAt(0);
-		int linha = Integer.parseInt(s.substring(1));
-		return new PosicaoXadrez(coluna, linha);
-		}
-		catch (RuntimeException e) {
+			String s = sc.nextLine();
+			char coluna = s.charAt(0);
+			int linha = Integer.parseInt(s.substring(1));
+			return new PosicaoXadrez(coluna, linha);
+		} catch (RuntimeException e) {
 			throw new InputMismatchException("Erro lendo a posição do xadrez: valores válidos são de a1 até h8.");
 		}
 	}
+
 	public static void printPartida(PartidaXadrez partidaXadrez, List<XadrezPeca> captura) {
 		printBoard(partidaXadrez.getPecas());
 		System.out.println();
 		printCapturaPeca(captura);
 		System.out.println("Jogada: " + partidaXadrez.getVirar());
-		System.out.println("Esperando jogador: " + partidaXadrez.getJodadorAtual());
+		if (!partidaXadrez.getCheckMate()) {
+			System.out.println("Esperando jogador: " + partidaXadrez.getJodadorAtual());
+			if (partidaXadrez.getCheck()) {
+				System.out.println("CHECK!");
+			}
+		} else {
+			System.out.println("CHECKMATE!");
+			System.out.println("Vencedor: " + partidaXadrez.getJodadorAtual());
+		}
 	}
-	
+
 	public static void printBoard(XadrezPeca[][] pecas) {
 		for (int i = 0; i < pecas.length; i++) {
 			System.out.print(8 - i + " ");
@@ -65,7 +73,7 @@ public class UI {
 		}
 		System.out.println("  a b c d e f g h");
 	}
-	
+
 	public static void printBoard(XadrezPeca[][] pecas, boolean[][] movimentosPossiveis) {
 		for (int i = 0; i < pecas.length; i++) {
 			System.out.print(8 - i + " ");
@@ -78,21 +86,21 @@ public class UI {
 	}
 
 	private static void printPecas(XadrezPeca peca, boolean background) {
-		if(background) {
+		if (background) {
 			System.out.print(ANSI_GREEN_BACKGROUND);
 		}
 		if (peca == null) {
 			System.out.print("-" + ANSI_RESET);
-		}else {
-			if(peca.getCor() == Cor.WHITE) {
+		} else {
+			if (peca.getCor() == Cor.WHITE) {
 				System.out.print(ANSI_WHITE + peca + ANSI_RESET);
 			} else {
 				System.out.print(ANSI_PURPLE + peca + ANSI_RESET);
 			}
 		}
-	    System.out.print(" ");	
-		}
-	
+		System.out.print(" ");
+	}
+
 	private static void printCapturaPeca(List<XadrezPeca> captura) {
 		List<XadrezPeca> white = captura.stream().filter(x -> x.getCor() == Cor.WHITE).collect(Collectors.toList());
 		List<XadrezPeca> black = captura.stream().filter(x -> x.getCor() == Cor.BLACK).collect(Collectors.toList());
