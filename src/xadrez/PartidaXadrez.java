@@ -8,6 +8,7 @@ import tabuleiro.Board;
 import tabuleiro.Peca;
 import tabuleiro.Posicao;
 import xadrez.pecas.Bispo;
+import xadrez.pecas.Cavalo;
 import xadrez.pecas.Peao;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
@@ -203,8 +204,10 @@ public PartidaXadrez() {
 	
 	private void iniciarPartida() {
 		inserirNovaPeca('a', 1, new Torre(board, Cor.WHITE));
+		inserirNovaPeca('b', 1, new Cavalo(board, Cor.WHITE));
 		inserirNovaPeca('c', 1, new Bispo(board, Cor.WHITE));
 		inserirNovaPeca('f', 1, new Bispo(board, Cor.WHITE));
+		inserirNovaPeca('g', 1, new Cavalo(board, Cor.WHITE));
 		inserirNovaPeca('h', 1, new Torre(board, Cor.WHITE));
 		inserirNovaPeca('e', 1, new Rei(board, Cor.WHITE));
 		inserirNovaPeca('a', 2, new Peao(board, Cor.WHITE));
@@ -219,10 +222,12 @@ public PartidaXadrez() {
 		
 		
 		inserirNovaPeca('a', 8, new Torre(board, Cor.BLACK));
-		inserirNovaPeca('f', 8, new Bispo(board, Cor.BLACK));
+		inserirNovaPeca('b', 8, new Cavalo(board, Cor.BLACK));
 		inserirNovaPeca('c', 8, new Bispo(board, Cor.BLACK));
-		inserirNovaPeca('h', 8, new Torre(board, Cor.BLACK));
 		inserirNovaPeca('e', 8, new Rei(board, Cor.BLACK));
+		inserirNovaPeca('f', 8, new Bispo(board, Cor.BLACK));
+		inserirNovaPeca('g', 8, new Cavalo(board, Cor.BLACK));
+		inserirNovaPeca('h', 8, new Torre(board, Cor.BLACK));
 		inserirNovaPeca('a', 7, new Peao(board, Cor.BLACK));
 		inserirNovaPeca('b', 7, new Peao(board, Cor.BLACK));
 		inserirNovaPeca('c', 7, new Peao(board, Cor.BLACK));
